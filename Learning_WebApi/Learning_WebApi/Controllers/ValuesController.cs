@@ -5,10 +5,16 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
+using Learning_WebApi.Models;
+
+using Newtonsoft.Json;
+
 namespace Learning_WebApi.Controllers
 {
     public class ValuesController : ApiController
     {
+        db10861113Entities db = new db10861113Entities();
+
         // GET api/values
         public IEnumerable<string> Get()
         {
@@ -16,9 +22,16 @@ namespace Learning_WebApi.Controllers
         }
 
         // GET api/values/5
-        public string Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return "value";
+            User data = db.User.Find(id);
+            if(data == null)
+            {
+                return NotFound();
+            }
+            string jsonData = JsonConvert.SerializeObject(data);
+
+            return Ok(jsonData);
         }
 
         // POST api/values
