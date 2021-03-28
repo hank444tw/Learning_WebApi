@@ -4,10 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-
+using System.Web.Mvc;
 using Learning_WebApi.Models;
 
 using Newtonsoft.Json;
+using AcceptVerbsAttribute = System.Web.Http.AcceptVerbsAttribute;
 
 namespace Learning_WebApi.Controllers
 {
@@ -16,9 +17,11 @@ namespace Learning_WebApi.Controllers
         db10861113Entities db = new db10861113Entities();
 
         // GET api/values
-        public IEnumerable<string> Get()
+        public IHttpActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            var data = db.User;
+            var str = db.User.ToList();
+            return Json(str);
         }
 
         // GET api/values/5
@@ -29,9 +32,8 @@ namespace Learning_WebApi.Controllers
             {
                 return NotFound();
             }
-            string jsonData = JsonConvert.SerializeObject(data);
 
-            return Ok(jsonData);
+            return Json(data);
         }
 
         // POST api/values
@@ -48,5 +50,11 @@ namespace Learning_WebApi.Controllers
         public void Delete(int id)
         {
         }
+    }
+
+    public class Student
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

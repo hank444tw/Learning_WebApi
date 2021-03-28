@@ -1,7 +1,70 @@
-﻿
+﻿@model IEnumerable<Learning_WebApi.Models.User>
+@using System.Web.Script.Serialization;
+
 @{
     ViewBag.Title = "Show";
 }
 
 <h2>Show</h2>
 
+<div class="container">
+
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            由
+            <span style="font-weight:bold">ViewBag</span>
+            顯示
+        </div>
+        <div class="panel-body">@ViewBag.jsonUsers</div>
+    </div>
+
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            由
+            <span style="font-weight:bold">Model</span>
+            顯示
+        </div>
+        <div class="panel-body">
+            @{
+                var jsonChange = new JavaScriptSerializer(); //序列化
+            }
+
+            @foreach (var m in Model)
+            {
+                @jsonChange.Serialize(m); //將物件轉換為json字串
+                <br />
+            }
+        </div>
+    </div>
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            使用
+            <span style="font-weight:bold">$.get</span>
+            呼叫
+            <span style="font-weight:bold">Api</span>
+            顯示
+        </div>
+        <div class="panel-body" id="getPanel"></div>
+        <div class="panel-footer panel-info">api網址:<span class="apiPanel" style="font-weight:bold"></span></div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        let apiUrl = "/api/values";
+        $(".apiPanel").html(apiUrl);
+
+        /*--------------$.get----------------*/
+        $.get(apiUrl, function (response) {
+            console.log(response);
+            $("#getPanel").html(
+                JSON.stringify(response) /*將物件轉為json*/
+            );
+        });
+        /*--------------$.get End-------------*/
+
+    </script>
+}
