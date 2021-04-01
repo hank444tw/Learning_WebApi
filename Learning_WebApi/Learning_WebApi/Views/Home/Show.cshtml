@@ -10,12 +10,14 @@
 <div class="container">
 
     <div class="panel panel-success">
+
         <div class="panel-heading">
             由
             <span style="font-weight:bold">ViewBag</span>
             顯示
         </div>
-        <div class="panel-body">@ViewBag.jsonUsers</div>
+        <div class="panel-body">@Html.Raw(ViewBag.jsonUsers)</div>
+
     </div>
 
     <div class="panel panel-warning">
@@ -46,7 +48,7 @@
             顯示
         </div>
         <div class="panel-body" id="getPanel"></div>
-        <div class="panel-footer panel-info">api網址:<span class="apiPanel" style="font-weight:bold"></span></div>
+        <div class="panel-footer panel-info">api網址:<a href="" class="apiPanel" style="font-weight:bold"></a></div>
     </div>
 
 </div>
@@ -54,15 +56,16 @@
 @section scripts{
     <script type="text/javascript">
 
-        let apiUrl = "/api/values";
-        $(".apiPanel").html(apiUrl);
+        let apiUrl = "/api/values"; //api網址
+        $(".apiPanel").html(apiUrl).attr("href", apiUrl);
 
         /*--------------$.get----------------*/
         $.get(apiUrl, function (response) {
-            console.log(response);
-            $("#getPanel").html(
-                JSON.stringify(response) /*將物件轉為json*/
-            );
+            /*console.log(response);*/
+            $.each(response, function (index, vel) { 
+                /*console.log(vel);*/
+                $("#getPanel").append(JSON.stringify(vel) + "<br>"); //將物件轉為json字串，再append進#getPanel
+            });
         });
         /*--------------$.get End-------------*/
 
