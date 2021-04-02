@@ -86,7 +86,7 @@
         $("#btnAjax").click(function () {
             $.ajax({
                 url: apiUrl,
-                type: "Get",
+                type: "POST",
                 contentType:"application/json",
                 success: function (response) {
                     $.each(response, function (index, vel) {
