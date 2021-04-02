@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<Learning_WebApi.Models.User>
-@using System.Web.Script.Serialization;
 
 @{
     ViewBag.Title = "Show";
 }
 
-<h2>Show</h2>
+<h2>顯示後端json字串</h2>
 
 <div class="container">
 
+    <!--ViewBag-->
     <div class="panel panel-success">
 
         <div class="panel-heading">
@@ -20,6 +20,7 @@
 
     </div>
 
+    <!--Model-->
     <div class="panel panel-warning">
         <div class="panel-heading">
             由
@@ -27,18 +28,18 @@
             顯示
         </div>
         <div class="panel-body">
-            @{
-                var jsonChange = new JavaScriptSerializer(); //序列化
-            }
 
             @foreach (var m in Model)
             {
-                @jsonChange.Serialize(m); //將物件轉換為json字串
-                <br />
+                //將物件解碼為Json字串
+                <div>
+                    @Json.Encode(m)
+                </div>
             }
         </div>
     </div>
 
+    <!--$.get-->
     <div class="panel panel-info">
         <div class="panel-heading">
             使用
@@ -48,6 +49,20 @@
             顯示
         </div>
         <div class="panel-body" id="getPanel"></div>
+        <div class="panel-footer panel-info">api網址:<a href="" class="apiPanel" style="font-weight:bold"></a></div>
+    </div>
+
+    <!--$.ajax-->
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            使用
+            <span style="font-weight:bold">$.ajax</span>
+            呼叫
+            <span style="font-weight:bold">Api</span>
+            顯示
+            <div class="btn btn-warning" id="btnAjax">開始</div>
+        </div>
+        <div class="panel-body" id="ajaxPanel" style="display:none;"></div>
         <div class="panel-footer panel-info">api網址:<a href="" class="apiPanel" style="font-weight:bold"></a></div>
     </div>
 
@@ -61,13 +76,27 @@
 
         /*--------------$.get----------------*/
         $.get(apiUrl, function (response) {
-            /*console.log(response);*/
             $.each(response, function (index, vel) { 
-                /*console.log(vel);*/
                 $("#getPanel").append(JSON.stringify(vel) + "<br>"); //將物件轉為json字串，再append進#getPanel
             });
         });
         /*--------------$.get End-------------*/
+
+        /*--------------$.ajax----------------*/
+        $("#btnAjax").click(function () {
+            $.ajax({
+                url: apiUrl,
+                type: "Get",
+                contentType:"application/json",
+                success: function (response) {
+                    $.each(response, function (index, vel) {
+                        $("#ajaxPanel").append(JSON.stringify(vel) + "<br>"); //將物件轉為json字串，再append進#ajaxPanel
+                    });
+                    $("#ajaxPanel").slideDown();
+                }
+            });
+        });
+        /*--------------$.ajax End----------------*/
 
     </script>
 }
